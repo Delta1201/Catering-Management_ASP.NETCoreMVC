@@ -1,1 +1,3 @@
 Pa55w@rd is the Password for all accounts
+
+Views->Home->Index= to modify the home page if the website starts working
