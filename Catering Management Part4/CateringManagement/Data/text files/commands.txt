@@ -1,0 +1,20 @@
+﻿PM> Add-Migration [migration name]
+PM> Update-Database
+
+Add-Migration -Context ApplicationDbContext -OutputDir Data\Migrations Initial
+Update-Database -Context ApplicationDbContext
+
+Add-Migration -Context CateringContext -o Data\CMMigrations Initial
+Update-Database -Context CateringContext
+
+Add-Migration -Context CateringContext -o Data\CMMigrations 2b
+Update-Database -Context CateringContext
+
+Add-Migration -Context CateringContext -o Data\CMMigrations uploadedDocuments
+Update-Database -Context CateringContext
+
+Add-Migration -Context CateringContext -o Data\CMMigrations email1
+Update-Database -Context CateringContext
+
+Remeber to add...
+            ExtraMigration.Steps(migrationBuilder);

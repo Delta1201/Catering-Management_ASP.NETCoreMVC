@@ -1,0 +1,189 @@
+﻿@model IEnumerable<CateringManagement.Models.Customer>
+
+<partial name="_ViewHeading" />
+
+<form asp-action="Notification" method="post">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+
+    <div class="row mt-3">
+        <div class="col-md-5">
+            <label for="availableCustomers">Available Customers</label>
+            <select id="availableCustomers" name="availableCustomerIds[]" multiple="multiple">
+                @foreach (var item in Model)
+                {
+                    <option value="@item.ID">@item.FullName</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="button" id="btnAdd" class="btn btn-primary btn-block" >&gt;&gt;</button>
+            <button type="button" id="btnRemove" class="btn btn-primary btn-block" style="background-color:red">&lt;&lt;</button>
+        </div>
+        <div class="col-md-5">
+            <label for="selectedCustomers">Selected Customers</label>
+            <select id="selectedCustomers" name="selectedCustomerIds[]" multiple="multiple">
+                <!-- Placeholder -->
+                <option value="" disabled selected>Selected customers</option>
+            </select>
+        </div>
+
+        @* <div >
+            <button type="submit" class="btn btn-primary">Send Email to Selected Customers</button>
+        </div> *@
+        <div class="mt-3">
+            <button type="submit" id="sendEmailButton" class="btn btn-primary">Send Email to Selected Customers</button>
+
+            <!-- Hidden input fields to store selected customer IDs -->
+            @foreach (var item in Model)
+            {
+                <input type="hidden" name="selectedCustomerIds[]" value="@item.ID" />
+            }
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    <input type="submit" name="actionButton" value="Customer" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Company Name" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Phone" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Customer Code" class="btn btn-link" />
+                </th>
+                <th style="min-width:120px">
+                    <a asp-action="Create" class="btn btn-sm btn-outline-success"
+                       role="button" data-bs-toggle="tooltip" title="Create New @ViewData["ControllerFriendlyName"]">
+                        <strong>&#x270D; Create New</strong>
+                    </a>
+
+                </th>
+                <th style="min-width:120px">
+                    <a 
+                       title="Send Email @ViewData["ControllerFriendlyName"]">
+                        <strong>Click icon to Send Email</strong>
+                    </a>
+
+                </th>
+            </tr>
+        </thead>
+       
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{
+                            if (item.CustomerThumbnail?.Content != null)
+                            {
+                                string imageBase64 = Convert.ToBase64String(item.CustomerThumbnail.Content);
+                                string imageSrc = string.Format("data:" + item.CustomerThumbnail.MimeType + ";base64,{0}", imageBase64);
+                                <img src="@imageSrc" alt="Profile Picture of @item.FullName" title="Profile Picture of @item.FullName" class="img-fluid rounded" />
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Summary)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CompanyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneFormatted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerCode)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary"
+                           role="button" data-bs-toggle="tooltip" title="Edit @ViewData["ControllerFriendlyName"]">
+                            &#x270E;
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary"
+                           role="button" data-bs-toggle="tooltip" title="@ViewData["ControllerFriendlyName"] Details">
+                            &#x1F50E;
+                        </a>
+                       @* 
+                        <a asp-controller="CustomerFunction" asp-action="Index" asp-route-CustomerID="@item.ID" class="btn btn-sm btn-outline-primary"
+                           role="button" data-bs-toggle="tooltip" title="@ViewData["ControllerFriendlyName"] Details">
+                            &#x1F50E;
+                        </a> *@
+                        
+                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary"
+                           role="button" data-bs-toggle="tooltip" title="Delete @ViewData["ControllerFriendlyName"]">
+                            &#x274C;
+                        </a> 
+                        @* <a asp-controller="Customer" asp-action="Notification" asp-route-id="@item.ID" class="linkClick">Send Email Notification</a> *@
+                    </td>
+                    <td>
+                        @* <a asp-controller="Customer" asp-action="Notification" asp-route-id="@item.ID" class="linkClick">Send Email Notification</a> *@
+                        <a asp-action="Notification" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary"
+                           role="button" data-bs-toggle="tooltip" title="Send Email @ViewData["ControllerFriendlyName"]">
+                            &#x1F4E7;
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+    <form asp-action="Index" method="post">
+    <partial name="_PagingNavBar" />
+    @* <a asp-controller="Customer" asp-action="Notification" asp-route-id="@Model?.ID" class="linkClick">Send Email Notification</a> | *@
+</form>
+
+@section Scripts {
+
+  
+    <script type="text/javascript">
+        document.getElementById('btnAdd').addEventListener('click', function () {
+            moveItems('availableCustomers', 'selectedCustomers');
+            updateSendEmailButtonVisibility();
+        });
+
+        document.getElementById('btnRemove').addEventListener('click', function () {
+            moveItems('selectedCustomers', 'availableCustomers');
+            updateSendEmailButtonVisibility();
+        });
+
+        function moveItems(sourceId, destinationId) {
+            var sourceList = document.getElementById(sourceId);
+            var destinationList = document.getElementById(destinationId);
+
+            for (var i = 0; i < sourceList.options.length; i++) {
+                if (sourceList.options[i].selected) {
+                    destinationList.add(new Option(sourceList.options[i].text, sourceList.options[i].value));
+                    sourceList.remove(i);
+                    i--; // Adjust the index after removing an item
+                }
+            }
+        }
+        document.getElementById('sendEmailButton').addEventListener('click', function () {
+            // Ensure that the selected customer IDs are submitted with the form
+            var selectedCustomersList = document.getElementById('selectedCustomers');
+
+            for (var i = 0; i < selectedCustomersList.options.length; i++) {
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'selectedCustomerIds[]';
+                hiddenInput.value = selectedCustomersList.options[i].value;
+
+                document.forms[0].appendChild(hiddenInput);
+            }
+        });
+        function updateSendEmailButtonVisibility() {
+            var selectedCustomersList = document.getElementById('selectedCustomers');
+            var sendEmailButton = document.getElementById('sendEmailButton');
+
+            // Enable or disable the button based on whether there are selected customers
+            sendEmailButton.disabled = selectedCustomersList.options.length === 0;
+        }
+    </script>
+}

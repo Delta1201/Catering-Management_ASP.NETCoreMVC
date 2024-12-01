@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Notification Email";
+}
+
+<h1>Notification Email</h1>
+
+<h2>Message to Customer in @ViewData["CustomerName"]</h2>
+
+<hr />
+@* <form asp-action="Notification"> *@
+ <form asp-controller="Customer" asp-action="Notification">
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="text-danger">@ViewData["Message"]</div>
+            <hr />
+            <input type="hidden" name="id" value="@ViewData["id"]" />
+            <input type="hidden" name="TrialName" value="@ViewData["CustomerName"]" />
+            <div class="form-group">
+                <label for="Subject" class="control-label">Email Subject</label>
+                <input type="text" id="Subject" name="Subject" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="emailContent" class="control-label">Message Content</label>
+                <textarea id="emailContent" name="emailContent" rows="5" cols="40" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send" class="btn btn-primary" />
+            </div>
+
+        </div>
+    </div>
+</form>
+<div>
+    <partial name="_BackToList" />
+</div>

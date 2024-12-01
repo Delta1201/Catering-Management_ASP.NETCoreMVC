@@ -1,0 +1,218 @@
+﻿@* @model IEnumerable<CateringManagement.Models.Customer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MiddleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EMail)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MiddleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EMail)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+ *@
+ @model IEnumerable<CateringManagement.Models.Function>
+
+@{
+    CateringManagement.Models.Customer customer = (CateringManagement.Models.Customer)ViewBag.Customer;
+    <partial name="_CustomerDetail" model="customer" />
+    ViewData["Title"] = ViewData["ControllerFriendlyName"];
+}
+
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <input type="hidden" name="CustomerID" value="@customer.ID" />
+    <div class="form-horizontal">
+        <button class="btn @(ViewData["Filtering"])" type="button" data-bs-toggle="collapse" id="filterToggle" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            Filter/Search @ViewData["numberFilters"]
+        </button><br />
+        <div class="collapse @ViewData["ShowFilter"]" id="collapseFilter">
+            <div class="collapse card card-body bg-light" style="padding-top: 10px; padding-bottom: 5px;" id="collapseFilter">
+                <div class="row">
+                    <div class="form-group col-md-4 ml-md-3">
+                        <label class="control-label">Reason:</label>
+                        @Html.DropDownList("FunctionReasonID", null, "All Reasons", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search Notes:</label>
+                        @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4 align-self-end">
+                        <input type="submit" name="actionButton" value="Apply" class="btn btn-primary" />
+                        <a asp-action="Index" asp-route-CustomerID="@customer.ID">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <table class="table">
+                <tr>
+                    <th>
+                        <input type="submit" name="actionButton" value="Function" class="btn btn-link" />
+                    </th>
+                    <th>
+                        <input type="submit" name="actionButton" value="Appt. Reason" class="btn btn-link" />
+                    </th>
+                    <th>
+                        <input type="submit" name="actionButton" value="Extra Fees" class="btn btn-link" />
+                        @{
+                            double totalFees = 0d;
+                        }
+                    </th>
+                    <th>
+                        <input type="submit" value="Notes" class="btn btn-toolbar" />
+                    </th>
+                    <th>
+                        <input type="submit" value="Function" class="btn btn-toolbar" />
+                    </th>
+                    <th>
+                        <a asp-controller="CustomerFunction" asp-action="Add"
+                           asp-route-CustomerID="@customer.ID" asp-route-CustomerName="@customer.FullName">
+                            <span class="btn btn-success" data-bs-toggle="tooltip"
+                                  title="Add Function"><strong>&#x271A; Add</strong></span>
+                        </a>
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDateSummary) -
+                            @* @Html.DisplayFor(modelItem => item.StartTimeSummary) *@
+                            (@Html.DisplayFor(modelItem => item.DurationSummary))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FunctionType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EstimatedValue)
+                            @{
+                                totalFees += item.BaseCharge;
+                            }
+                        </td>
+                        <td>
+                            @{
+                                string[] noteWords = item.SetupNotes.Split(' ');
+                                if (noteWords.Count() > 5)
+                                {
+                                    <a class="" role="button" data-bs-toggle="collapse" href="#collapseSum@(item.ID)" aria-expanded="false" aria-controls="collapseSum@(item.ID)">
+                                        @(string.Join(" ", noteWords.Take(5)) + "...")
+                                    </a>
+                                    <div class="collapse" id="collapseSum@(item.ID)">
+                                        <div class="well">
+                                            @(string.Join(" ", noteWords.Skip(5)))
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @item.SetupNotes
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Customer.FullName)
+                        </td>
+                        <td>
+                            <a asp-controller="CustomerFunction" asp-action="Update" asp-route-id="@item.ID"
+                               class="btn btn-sm btn-outline-primary" role="button"
+                               data-bs-toggle="tooltip" title="Edit @ViewData["ControllerFriendlyName"]">
+                                &#x270D;
+                            </a>
+                            <a asp-controller="CustomerFunction" asp-action="Remove" asp-route-id="@item.ID"
+                               class="btn btn-sm btn-outline-danger" role="button"
+                               data-bs-toggle="tooltip" title="Delete @ViewData["ControllerFriendlyName"]">
+                                &#x274C;
+                            </a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td align="right">
+                        Total Fees:
+                    </td>
+                    <td>
+                        <strong>@totalFees.ToString("c")</strong>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <partial name="_PagingNavBar" />
+    <div>
+        <a asp-action="Edit" asp-controller="Customer" asp-route-id="@customer.ID">Edit @customer.FullName</a> |
+        <a href='@ViewData["returnURL"]'>Back to Customer List</a>
+    </div>
+</form>
+@section Scripts {
+    <script type="text/javascript">
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+}

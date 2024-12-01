@@ -1,0 +1,155 @@
+﻿@model CateringManagement.Models.Function
+
+<partial name="_ViewHeading" />
+
+<hr />
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LobbySign" class="control-label"></label>
+                <input asp-for="LobbySign" class="form-control" />
+                <span asp-validation-for="LobbySign" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerID" class="control-label"></label>
+                <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerID">
+                    <option value="">Select a Customer</option>
+                </select>
+                <span asp-validation-for="CustomerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartTime" class="control-label"></label>
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndTime" class="control-label"></label>
+                <input asp-for="EndTime" class="form-control" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SetupNotes" class="control-label"></label>
+                <textarea asp-for="SetupNotes" rows="5" class="form-control"></textarea>
+                <span asp-validation-for="SetupNotes" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="BaseCharge" class="control-label"></label>
+                <input asp-for="BaseCharge" class="form-control" />
+                <span asp-validation-for="BaseCharge" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PerPersonCharge" class="control-label"></label>
+                <input asp-for="PerPersonCharge" class="form-control" />
+                <span asp-validation-for="PerPersonCharge" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GuaranteedNumber" class="control-label"></label>
+                <input asp-for="GuaranteedNumber" class="form-control" />
+                <span asp-validation-for="GuaranteedNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SOCAN" class="control-label"></label>
+                <input asp-for="SOCAN" class="form-control" />
+                <span asp-validation-for="SOCAN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Deposit" class="control-label"></label>
+                <input asp-for="Deposit" class="form-control" />
+                <span asp-validation-for="Deposit" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Alcohol" /> @Html.DisplayNameFor(model => model.Alcohol)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="DepositPaid" /> @Html.DisplayNameFor(model => model.DepositPaid)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="NoHST" /> @Html.DisplayNameFor(model => model.NoHST)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="NoGratuity" /> @Html.DisplayNameFor(model => model.NoGratuity)
+                </label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label custom-file-label">Upload Documents:</label>
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" name="theFiles" multiple="multiple">
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="FunctionTypeID" class="control-label"></label>
+                <select asp-for="FunctionTypeID" class="form-control" asp-items="ViewBag.FunctionTypeID">
+                    <option value="">Select a Function Type</option>
+                </select>
+                <span asp-validation-for="FunctionTypeID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MealTypeID" class="control-label"></label>
+                <select asp-for="MealTypeID" class="form-control" asp-items="ViewBag.MealTypeID">
+                    <option value="">No Food Service</option>
+                </select>
+                <span asp-validation-for="MealTypeID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">@Html.DisplayNameFor(model => model.FunctionRooms)</label>
+                <div class="m-2">
+                    <table>
+                        <tr>
+                            @{
+                                int cnt = 0;
+                                List<CateringManagement.ViewModels.CheckOptionVM> checkboxes = ViewBag.RoomOptions;
+                                foreach (var checkbox in checkboxes)
+                                {
+                                    if (cnt++ % 1 == 0)
+                                    {
+                                    @:</tr><tr>
+                                    }
+                                    @:<td>
+                                        <input type="checkbox"
+                                               name="selectedOptions"
+                                               value="@checkbox.ID"
+                                               @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
+                                        @checkbox.DisplayText @:&nbsp;&nbsp;
+                                    @:</td>
+                                }
+                            @:</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <partial name="_BackToList" />
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

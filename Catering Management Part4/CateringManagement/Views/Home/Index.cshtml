@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="text-center">
+    <h4>Project Part 4</h4>
+    <h2>Dhaval Tailor </h2>
+    <h3>This is guided project for PROG1322</h3>
+    <p class="display-5">
+        Catering Management Project
+    </p>
+    <hr class="my-4">
+@*     <p>
+        <a href="https://cateringmanagement20231212143916.azurewebsites.net/" target="_blank" class="btn btn-primary btn-lg">Link to Azure Live Website &raquo;</a>
+    </p>
+ *@
+</div>
+<p>
+    @* <h5 class="text-left">All emails send from the Customers Page <a target="_blank" >: Click "Send Email/s" in dropdown menu</a></h5> *@
+</p>
+
+
+@* <div class="row">
+    <div class="col-md-4">
+        <h2>Dropdown Menus</h2>
+        <p>These are used on the Shared, _Layout view file that is providing the Menu at the top of the screen.</p>
+        <p><a class="btn btn-outline-primary" target="_blank" href="https://getbootstrap.com/docs/5.1/components/navs-tabs/#using-dropdowns">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Styled Tooltips</h2>
+        <p>Jump Forward/Back buttons on the Paging Toolbar show how many pages displayed in Tooltips on the <a asp-controller="Customer" asp-action="Index">Customers/Index</a> and other views.</p>
+        <p><a class="btn btn-outline-primary" target="_blank" href="https://getbootstrap.com/docs/5.1/components/tooltips/">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Collapse</h2>
+        <p>Booked Function Rooms displayed in collapasable div's on the <a asp-controller="Function" asp-action="Index">Functions/Index</a> view.</p>
+        <p><a class="btn btn-outline-primary" target="_blank" href="https://getbootstrap.com/docs/5.1/components/collapse/">Learn more &raquo;</a></p>
+    </div>
+</div> *@
+<script>
+    //Register the service worker.
+    //Note is is still not "installable" without the manifest
+    if (navigator.serviceWorker.controller) {
+        console.log('Active service worker found, no need to register');
+    } else {
+        navigator.serviceWorker.register('sw.js', {
+            scope: './'
+        }).then(function (reg) {
+            console.log('Service worker has been registered for scope:' + reg.scope);
+        });
+    }
+</script>

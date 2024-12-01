@@ -1,0 +1,68 @@
+﻿@model IEnumerable<CateringManagement.ViewModels.FunctionRevenueVM>
+
+@{
+    ViewData["Title"] = "Function Revenue";
+}
+
+<h2>Function Revenue Report</h2>
+<a asp-action="DownloadFunctionRevenue" class="btn btn-info float-end">Download Revenue Report</a>
+<form asp-controller="Report" asp-action="FunctionRevenue" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <input type="submit" name="actionButton" value="Function Type" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Total Number" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Avg. Per Person Charge" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Avg. Guar. No." class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Total Value" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Avg. Value" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Highest Value" class="btn btn-link" />
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AveragePPCharge)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AverageGuarNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AvgValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaxValue)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <partial name="_PagingNavBar" />
+</form>

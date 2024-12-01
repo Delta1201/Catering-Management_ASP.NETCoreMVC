@@ -1,0 +1,166 @@
+﻿@model CateringManagement.Models.Function
+
+<partial name="_ViewHeading" />
+
+<div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.LobbySign)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.LobbySign)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.StartTime)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.StartDateSummary)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.EndTime)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.EndTimeSummary)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DurationSummary)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.DurationSummary)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.BaseCharge)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.BaseCharge)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.PerPersonCharge)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.PerPersonCharge)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.GuaranteedNumber)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.GuaranteedNumber)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.SOCAN)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.SOCAN)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Deposit)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Deposit)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Customer)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Customer.Summary)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Alcohol)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Alcohol)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DepositPaid)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.DepositPaid)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.NoHST)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.NoHST)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.NoGratuity)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.NoGratuity)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.FunctionType)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.FunctionType.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.MealType)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.MealType.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.FunctionRooms)
+                </dt>
+                <dd class="col-sm-8">
+                    @{
+                        int roomCount = Model.FunctionRooms.Count;
+                        if (roomCount > 0)
+                        {
+                            string firstRoom = Model.FunctionRooms.FirstOrDefault().Room.Summary;
+                            if (roomCount > 1)
+                            {
+                                string roomList = "";
+                                var c = Model.FunctionRooms.ToList();
+                                for (int i = 1; i < roomCount; i++)//Skip the first because we have it already
+                                {
+                                    roomList += c[i].Room.Summary + " <br />";
+                                }
+                                <a class="" role="button" data-bs-toggle="collapse" href="#collapseRoom@(Model.ID)"
+                                   aria-expanded="false" aria-controls="collapseRoom@(Model.ID)">
+                                    @firstRoom <span class="badge bg-info">@roomCount</span>
+                                </a>
+                                <div class="collapse" id="collapseRoom@(Model.ID)">
+                                    @Html.Raw(roomList)
+                                </div>
+                            }
+                            else
+                            {
+                                @firstRoom
+                            }
+                        }
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SetupNotes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SetupNotes)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ID" />
+        <input type="submit" @ViewData["NoSubmit"] value="Delete" class="btn btn-danger" /> |
+        <partial name="_BackToList" />
+    </form>
+</div>

@@ -1,0 +1,12 @@
+﻿<br />
+<div class="card mb-sm-3" style="min-width: 18rem;">
+    <h4 class="card-header" id="Room">Rooms</h4>
+    <div class="card-body">
+        @Html.DropDownList("RoomID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
+    </div>
+    <div class="card-footer">
+        <a asp-controller="Room" asp-action="Create">Create</a> |
+        <a asp-controller="Room" asp-action="Edit" class="linkClick">Edit</a> |
+        <a asp-controller="Room" asp-action="Delete" class="linkClick">Delete</a>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+
+<h2>Lookup Values</h2>
+
+<div class="text-danger">@Html.Raw(TempData["Feedback"])</div>
+<div>
+    <!-- Nav tabs -->
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="Information-Tab" data-bs-toggle="tab" data-bs-target="#InformationPanel" type="button" role="tab" aria-controls="InformationPanel" aria-selected="true">Information</button>
+            <button class="nav-link" id="Equipment-Tab" data-bs-toggle="tab" data-bs-target="#EquipmentPanel" type="button" role="tab" aria-controls="EquipmentPanel" aria-selected="false">Equipment</button>
+            <button class="nav-link" id="Room-Tab" data-bs-toggle="tab" data-bs-target="#RoomPanel" type="button" role="tab" aria-controls="RoomPanel" aria-selected="false">Rooms</button>
+            <button class="nav-link" id="MealType-Tab" data-bs-toggle="tab" data-bs-target="#MealTypePanel" type="button" role="tab" aria-controls="MealTypePanel" aria-selected="false">Meal Types</button>
+            <button class="nav-link" id="FunctionType-Tab" data-bs-toggle="tab" data-bs-target="#FunctionTypePanel" type="button" role="tab" aria-controls="FunctionTypePanel" aria-selected="false">Function Types</button>
+            <button class="nav-link" id="Worker-Tab" data-bs-toggle="tab" data-bs-target="#WorkerPanel" type="button" role="tab" aria-controls="WorkerPanel" aria-selected="false">Workers</button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="InformationPanel" role="tabpanel" aria-labelledby="InformationTab"><br />
+            <p>This page will allow you to manage all of the Lookup values in the system. </p><p>
+            Just select a Tab to view and maintiain the values for a specific one.</p>    
+        </div>
+        <div class="tab-pane fade" id="EquipmentPanel" role="tabpanel" aria-labelledby="Equipment-Tab"><br /></div>
+        <div class="tab-pane fade" id="RoomPanel" role="tabpanel" aria-labelledby="Room-Tab"><br /></div>
+        <div class="tab-pane fade" id="MealTypePanel" role="tabpanel" aria-labelledby="MealType-Tab"><br /></div>
+        <div class="tab-pane fade" id="FunctionTypePanel" role="tabpanel" aria-labelledby="FunctionTypePanel-Tab"><br /></div>
+        <div class="tab-pane fade" id="WorkerPanel" role="tabpanel" aria-labelledby="Worker-Tab"><br /></div>
+    </div>
+</div>
+<hr />
+<br />
+
+@section Scripts {
+    <script type="text/javascript">
+        function refreshTab(activeTab) {
+            switch (activeTab) {
+                case 'Equipment-Tab': $('#EquipmentPanel').load('/Lookup/Equipment');
+                    break;
+                case 'FunctionType-Tab': $('#FunctionTypePanel').load('/Lookup/FunctionType');
+                    break;
+                case 'Room-Tab': $('#RoomPanel').load('/Lookup/Room');
+                    break;
+                case 'MealType-Tab': $('#MealTypePanel').load('/Lookup/MealType');
+                    break;
+                case 'Worker-Tab': $('#WorkerPanel').load('/Lookup/Worker');
+                    break;
+                default: break;
+            };
+            return;
+        };
+        $('.nav-link').click(function () {
+            var activeTab = $(this).attr("id");
+            refreshTab(activeTab);
+        });
+        $(".tab-content").on("click", ".linkClick", function (event) {
+            event.preventDefault();
+            var address = $(this).attr("href");
+            var lookup = address.split("/")[1];
+            var id = $("#" + lookup + "ID").val();
+            var caption = $("#" + lookup).html();
+            if (id == null) {
+                alert("Error: no value selected from the " + caption + " list!");
+            } else {
+                window.location.href = address + "/" + id;
+            }
+        });
+        $(function () {
+            setTimeout(function () {
+                $("#@ViewData["Tab"]").trigger('click');
+            }, 10);
+        });
+    </script>
+}
+
+
+

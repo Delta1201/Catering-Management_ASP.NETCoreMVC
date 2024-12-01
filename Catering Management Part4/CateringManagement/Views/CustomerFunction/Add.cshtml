@@ -1,0 +1,63 @@
+﻿@model CateringManagement.Models.Function
+
+@{
+    ViewData["Title"] = "Add Function";
+}
+
+
+<h2>Add Function for Customer: @ViewData["CustomerName"]</h2>
+<hr />
+<form asp-action="Add">
+    <input type="hidden" name="CustomerID" value="@Model.CustomerID" />
+    <input type="hidden" name="CustomerName" value="@ViewData["CustomerName"]" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="StartTime" class="control-label"></label>
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndTime" class="control-label"></label>
+                <input asp-for="EndTime" class="form-control" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SetupNotes" class="control-label"></label>
+                <textarea asp-for="SetupNotes" rows="5" cols="40" class="form-control"></textarea>
+                <span asp-validation-for="SetupNotes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstimatedValue" class="control-label"></label>
+                <input asp-for="EstimatedValue" class="form-control" />
+                <span asp-validation-for="EstimatedValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FunctionTypeID" class="control-label"></label>
+                <select asp-for="FunctionTypeID" class="form-control" asp-items="ViewBag.FunctionID">
+                    <option value="">No Function</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FunctionType" class="control-label"></label>
+                <select asp-for="FunctionType" class="form-control" asp-items="ViewBag.FunctionID">
+                    <option value="">Select the Function</option>
+                </select>
+                <span asp-validation-for="FunctionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+<div>
+    <partial name="_BackToList" />
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

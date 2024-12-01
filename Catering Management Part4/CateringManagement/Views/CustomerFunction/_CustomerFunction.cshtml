@@ -1,0 +1,124 @@
+﻿@model CateringManagement.Models.Customer
+
+<figure class="row">
+    <p class="col-auto">
+        @{
+            if (Model.CustomerThumbnail?.Content != null)
+            {
+                string imageBase64 = Convert.ToBase64String(Model.CustomerThumbnail.Content);
+                string imageSrc = string.Format("data:" + Model.CustomerThumbnail.MimeType + ";base64,{0}", imageBase64);
+                <img src="@imageSrc" alt="Profile Picture of @Model.FullName" title="Profile Picture of @Model.FullName" class="img-fluid rounded" />
+            }
+            else
+            {
+                <img src="~/images/blankProfile.jpg" style="max-height: 80px; max-width: 96px" class="img-fluid rounded" />
+            }
+        }
+    </p>
+    <figcaption class="col mt-3"><h3><text class="d-none d-sm-inline">Customer: </text>@Model.FullName</h3></figcaption>
+</figure>
+<div class="row">
+    <div class="col-6">
+        <dl class="row">
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => Model.Phone)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => Model.Phone)
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => Model.LastName)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => Model.LastName)
+            </dd>
+            <dt class="col-md-4">
+                First/Middle
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => Model.FirstName) @Html.DisplayFor(model => Model.MiddleName)
+            </dd>
+            <dt class="col-md-4">
+                Age (@Html.DisplayNameFor(model => Model.CompanyName))
+            </dt>
+            <dd class="col-md-8">
+                @Model.Summary (@Html.DisplayFor(model => Model.Summary))
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => Model.FullName)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => Model.FullName)
+            </dd>
+        </dl>
+    </div>
+    <div class="col-6">
+        <dl class="row">
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => Model.Phone)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => Model.PhoneFormatted)
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => Model.EMail)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => Model.EMail)
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => Model.FullName)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => Model.FullName)
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => Model.Functions)
+            </dt>
+            <dd class="col-md-8">
+                @{
+                    if (Model.Functions != null)
+                    {
+                        <a href="#" data-bs-toggle="tooltip" title="@Model.Functions">Yes</a>
+                    }
+                    else
+                    {
+                        @:No
+                    }
+                }
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => Model.Functions)
+            </dt>
+            <dd class="col-md-8">
+                @{
+                    int condCount = Model.Functions.Count;
+                    if (condCount > 0)
+                    {
+                        string firstCond = Model.Functions.FirstOrDefault().FunctionType.Name;
+                        if (condCount > 1)
+                        {
+                            string condList = "";
+                            var c = Model.Functions.ToList();
+                            for (int i = 1; i < condCount; i++)//Skip the first because we have it already
+                            {
+                                condList += c[i].FunctionType.Name + " <br />";
+                            }
+                            <a class="" role="button" data-bs-toggle="collapse" href="#collapseHistory@(Model.ID)"
+                               aria-expanded="false" aria-controls="collapseHistory@(Model.ID)">
+                                @firstCond <span class="badge bg-info">@condCount</span>
+                            </a>
+                            <div class="collapse" id="collapseHistory@(Model.ID)">
+                                @Html.Raw(condList)
+                            </div>
+                        }
+                        else
+                        {
+                            @firstCond
+                        }
+                    }
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
